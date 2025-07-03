@@ -6,7 +6,7 @@ namespace Soenneker.Dtos.LaunchSettings;
 /// <summary>
 /// Represents a single launch profile for the application.
 /// </summary>
-public class LaunchProfile
+public sealed class LaunchProfile
 {
     /// <summary>
     /// The command to run (e.g., Project, IISExpress, Executable).

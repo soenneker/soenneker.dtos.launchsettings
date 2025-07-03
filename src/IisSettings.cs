@@ -5,7 +5,7 @@ namespace Soenneker.Dtos.LaunchSettings;
 /// <summary>
 /// Represents IIS-specific settings for development.
 /// </summary>
-public class IisSettings
+public sealed class IisSettings
 {
     /// <summary>
     /// Whether Windows Authentication is enabled for the IIS Express profile.

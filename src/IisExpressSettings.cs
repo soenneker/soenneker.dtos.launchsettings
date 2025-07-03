@@ -5,7 +5,7 @@ namespace Soenneker.Dtos.LaunchSettings;
 /// <summary>
 /// Configuration for IIS Express hosting.
 /// </summary>
-public class IisExpressSettings
+public sealed class IisExpressSettings
 {
     /// <summary>
     /// The URL where the application is hosted by IIS Express.

@@ -6,7 +6,7 @@ namespace Soenneker.Dtos.LaunchSettings;
 /// <summary>
 /// Represents the root structure of a launchSettings.json file used by .NET projects.
 /// </summary>
-public class LaunchSettings
+public sealed class LaunchSettings
 {
     /// <summary>
     /// A dictionary of launch profiles, where the key is the profile name.
