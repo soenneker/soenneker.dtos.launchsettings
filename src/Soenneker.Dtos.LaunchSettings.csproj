@@ -14,7 +14,7 @@
         <AssemblyName>Soenneker.Dtos.LaunchSettings</AssemblyName>
         <PackageId>Soenneker.Dtos.LaunchSettings</PackageId>
         <PackageTags>dtos launchsettings launch settings profile launchprofile iissettings iis dotnet kestral object csharp c# .net</PackageTags>
-        <Copyright>Copyright © 2025 Jake Soenneker</Copyright>
+        <Copyright>Copyright © 2025-2026 Jake Soenneker</Copyright>
         <Authors>Jake Soenneker</Authors>
         <Company>https://soenneker.com</Company>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
