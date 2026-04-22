@@ -1,11 +1,10 @@
-﻿using Soenneker.Tests.Unit;
-using Xunit;
+using Soenneker.Tests.Unit;
 
 namespace Soenneker.Dtos.LaunchSettings.Tests;
 
 public sealed class LaunchSettingsTests : UnitTest
 {
-    [Fact]
+    [Test]
     public void Default()
     {
 
