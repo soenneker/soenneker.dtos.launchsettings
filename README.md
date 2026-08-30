@@ -5,7 +5,7 @@
 
 # Soenneker.Dtos.LaunchSettings
 
-Configuration for IIS Express hosting.
+Typed `System.Text.Json` models for reading and writing a .NET project's `Properties/launchSettings.json` file.
 
 ## Install
 
@@ -13,32 +13,44 @@ Configuration for IIS Express hosting.
 dotnet add package Soenneker.Dtos.LaunchSettings
 ```
 
-## What you get
+## Read launch settings
 
-- `IisExpressSettings` — Configuration for IIS Express hosting.
-- `IisSettings` — Represents IIS-specific settings for development.
-- `LaunchProfile` — Represents a single launch profile for the application.
-- `LaunchSettings` — Represents the root structure of a launchSettings.json file used by .NET projects.
+```csharp
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Soenneker.Dtos.LaunchSettings;
 
-## API at a glance
+string json = await File.ReadAllTextAsync("Properties/launchSettings.json");
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `IisExpressSettings.ApplicationUrl` | The URL where the application is hosted by IIS Express. | The URL where the application is hosted by IIS Express. |
-| `IisExpressSettings.SslPort` | The SSL port used by IIS Express. | The SSL port used by IIS Express. |
-| `IisSettings.WindowsAuthentication` | Whether Windows Authentication is enabled for the IIS Express profile. | Whether Windows Authentication is enabled for the IIS Express profile. |
-| `IisSettings.AnonymousAuthentication` | Whether Anonymous Authentication is enabled for the IIS Express profile. | Whether Anonymous Authentication is enabled for the IIS Express profile. |
-| `IisSettings.IisExpress` | Configuration settings for IIS Express. | Configuration settings for IIS Express. |
-| `LaunchProfile.CommandName` | The command to run (e.g., Project, IISExpress, Executable). | The command to run (e.g., Project, IISExpress, Executable). |
-| `LaunchProfile.DotnetRunMessages` | If true, enables .NET CLI run messages when using 'dotnet run'. | If true, enables .NET CLI run messages when using 'dotnet run'. |
-| `LaunchProfile.LaunchBrowser` | Indicates whether the browser should be launched automatically. | Indicates whether the browser should be launched automatically. |
-| `LaunchProfile.LaunchUrl` | The URL to launch in the browser when the application starts. | The URL to launch in the browser when the application starts. |
-| `LaunchProfile.ApplicationUrl` | The base URL where the application will be hosted. | The base URL where the application will be hosted. |
-| `LaunchProfile.EnvironmentVariables` | A collection of environment variables to set for the launch profile. | A collection of environment variables to set for the launch profile. |
-| `LaunchProfile.InspectUri` | The URI used for debugging inspection (typically for Node.js or browser-based debugging). | The URI used for debugging inspection (typically for Node.js or browser-based debugging). |
-| `LaunchProfile.WorkingDirectory` | The working directory for the application when launched. | The working directory for the application when launched. |
-| `LaunchProfile.CommandLineArgs` | Additional command-line arguments passed to the application. | Additional command-line arguments passed to the application. |
-| `LaunchProfile.NativeDebugging` | Indicates whether native debugging is enabled (for unmanaged code). | Indicates whether native debugging is enabled (for unmanaged code). |
-| `LaunchProfile.Port` | Gets or sets the port number used by the application (not serialized). | Gets or sets the port number used by the application (not serialized). |
-| `LaunchSettings.Profiles` | A dictionary of launch profiles, where the key is the profile name. | A dictionary of launch profiles, where the key is the profile name. |
-| `LaunchSettings.IisSettings` | Optional IIS settings used during development when targeting IIS Express. | Optional IIS settings used during development when targeting IIS Express. |
+LaunchSettings? settings = JsonSerializer.Deserialize<LaunchSettings>(json);
+
+if (settings?.Profiles.TryGetValue("https", out LaunchProfile? profile) == true)
+{
+    Console.WriteLine(profile.ApplicationUrl);
+    Console.WriteLine(profile.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"]);
+}
+```
+
+## Create or update a profile
+
+```csharp
+var settings = new LaunchSettings();
+
+settings.Profiles["Worker"] = new LaunchProfile
+{
+    CommandName = "Project",
+    DotnetRunMessages = true,
+    EnvironmentVariables =
+    {
+        ["DOTNET_ENVIRONMENT"] = "Development"
+    }
+};
+
+string json = JsonSerializer.Serialize(settings, new JsonSerializerOptions
+{
+    WriteIndented = true,
+    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+});
+```
+
+`Profiles` and each profile's `EnvironmentVariables` dictionary are initialized automatically. Optional members remain `null` when absent. `LaunchProfile.Port` is an application-only convenience property marked with `[JsonIgnore]`; it is never read from or written to `launchSettings.json`.
